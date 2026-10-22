@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Учёт сотрудников</title>
+    <style>
+        body { font-family: sans-serif; margin: 24px; }
+        table { border-collapse: collapse; margin-top: 12px; }
+        th, td { border: 1px solid #ccc; padding: 6px 10px; text-align: left; }
+        th { background: #f3f3f3; }
+        form.inline { display: inline; }
+        .empty { color: #777; margin-top: 12px; }
+    </style>
+</head>
+<body>
+<h1>Сотрудники</h1>
+
+<form method="get" th:action="@{/employees}">
+    <input type="text" name="name" placeholder="Поиск по ФИО" th:value="${name}"/>
+    <select name="active">
+        <option value="" th:selected="${active == null}">Все</option>
+        <option value="true" th:selected="${active != null and active}">Активные</option>
+        <option value="false" th:selected="${active != null and !active}">Неактивные</option>
+    </select>
+    <button type="submit">Найти</button>
+    <a th:href="@{/employees}">Сбросить</a>
+</form>
+
+<p><a th:href="@{/employees/add}">Добавить сотрудника</a></p>
+
+<table th:if="${!employees.isEmpty()}">
+    <tr>
+        <th>ID</th><th>ФИО</th><th>Email</th><th>Телефон</th>
+        <th>Должность</th><th>Зарплата</th><th>Активен</th><th></th>
+    </tr>
+    <tr th:each="e : ${employees}">
+        <td th:text="${e.id}"></td>
+        <td th:text="${e.fullName}"></td>
+        <td th:text="${e.email}"></td>
+        <td th:text="${e.phone}"></td>
+        <td th:text="${e.position}"></td>
+        <td th:text="${e.salary}"></td>
+        <td th:text="${e.active} ? 'Да' : 'Нет'"></td>
+        <td>
+            <a th:href="@{/employees/edit/{id}(id=${e.id})}">Изменить</a>
+            <form class="inline" method="post" th:action="@{/employees/delete/{id}(id=${e.id})}"
+                  onsubmit="return confirm('Удалить сотрудника?');">
+                <button type="submit">Удалить</button>
+            </form>
+        </td>
+    </tr>
+</table>
+<p class="empty" th:if="${employees.isEmpty()}">Сотрудники не найдены.</p>
+</body>
+</html>

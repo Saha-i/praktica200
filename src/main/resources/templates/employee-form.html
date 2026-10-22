@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Сотрудник</title>
+    <style>
+        body { font-family: sans-serif; margin: 24px; }
+        form div { margin-bottom: 12px; }
+        label { display: inline-block; width: 110px; }
+        .error { color: red; margin-left: 8px; }
+    </style>
+</head>
+<body>
+<h1 th:text="${employee.id == null} ? 'Добавление сотрудника' : 'Редактирование сотрудника'"></h1>
+
+<form method="post" th:object="${employee}"
+      th:action="${employee.id == null} ? @{/employees/add} : @{/employees/edit/{id}(id=${employee.id})}">
+
+    <div>
+        <label for="fullName">ФИО</label>
+        <input type="text" id="fullName" th:field="*{fullName}"/>
+        <span class="error" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></span>
+    </div>
+    <div>
+        <label for="email">Email</label>
+        <input type="text" id="email" th:field="*{email}"/>
+        <span class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+    </div>
+    <div>
+        <label for="phone">Телефон</label>
+        <input type="text" id="phone" th:field="*{phone}" placeholder="+7XXXXXXXXXX"/>
+        <span class="error" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></span>
+    </div>
+    <div>
+        <label for="position">Должность</label>
+        <input type="text" id="position" th:field="*{position}"/>
+        <span class="error" th:if="${#fields.hasErrors('position')}" th:errors="*{position}"></span>
+    </div>
+    <div>
+        <label for="salary">Зарплата</label>
+        <input type="number" id="salary" step="0.01" th:field="*{salary}"/>
+        <span class="error" th:if="${#fields.hasErrors('salary')}" th:errors="*{salary}"></span>
+    </div>
+    <div>
+        <label for="active">Активен</label>
+        <input type="checkbox" id="active" th:field="*{active}"/>
+    </div>
+
+    <button type="submit">Сохранить</button>
+    <a th:href="@{/employees}">Отмена</a>
+</form>
+</body>
+</html>
