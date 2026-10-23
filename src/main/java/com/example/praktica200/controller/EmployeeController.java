@@ -42,7 +42,7 @@ public class EmployeeController {
     @PostMapping("/employees/add")
     public String add(@Valid @ModelAttribute("employee") Employee employee,
                       BindingResult result) {
-        employee.setId(null); // защита от подмены id в форме
+        employee.setId(null);
         if (!result.hasFieldErrors("email") && employeeService.emailExists(employee.getEmail())) {
             result.rejectValue("email", "duplicate", DUPLICATE_EMAIL);
         }
@@ -65,7 +65,7 @@ public class EmployeeController {
     public String edit(@PathVariable Long id,
                        @Valid @ModelAttribute("employee") Employee employee,
                        BindingResult result) {
-        employeeService.getById(id); // 404, если нет такого сотрудника
+        employeeService.getById(id); 
         employee.setId(id);
         if (!result.hasFieldErrors("email") && employeeService.emailExists(employee.getEmail(), id)) {
             result.rejectValue("email", "duplicate", DUPLICATE_EMAIL);
